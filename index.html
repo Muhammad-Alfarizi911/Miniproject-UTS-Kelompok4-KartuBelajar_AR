@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>Kartu Belajar AR - Komponen Komputer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="importmap">
+{
+  "imports": {
+    "three": "./js/three-shim.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.175.0/examples/jsm/",
+    "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.175.0/examples/jsm/",
+    "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+  }
+}
+</script>
+</head>
+
+<body>
+    <div id="ar-container"></div>
+
+    <div class="hud">
+        <div id="status" class="pill">Mencari Kartu...</div>
+        <div class="hud-right">
+            <div id="score" class="pill">Skor: 0/4</div>
+            <button id="btn-reset" class="pill btn">Reset Skor</button>
+        </div>
+    </div>
+
+    <div id="zoom" class="zoom hidden">
+        <button id="btn-plus" aria-label="Perbesar">+</button>
+        <button id="btn-minus" aria-label="Perkecil">&minus;</button>
+    </div>
+
+    <section id="quiz" class="quiz hidden">
+        <div id="q-comp" class="q-comp"></div>
+        <div id="q-timer" class="timer hidden">
+            <div class="track">
+                <div id="q-bar"></div>
+            </div><span id="q-time"></span>
+        </div>
+        <h2 id="q-text"></h2>
+        <div id="q-options"></div>
+        <div id="q-feedback" class="feedback"></div>
+    </section>
+
+    <div id="start" class="overlay">
+        <div class="box start-box">
+            <span class="badge">Praktikum AR/VR &middot; FIKTI UMSU</span>
+            <h1>Kartu Belajar AR:<br>Komponen Komputer</h1>
+            <p class="lead">Pindai kartu <b>CPU, RAM, GPU, dan Motherboard</b> untuk memunculkan model 3D beranimasi dan
+                jawab kuisnya.</p>
+            <div class="opts">
+                <label class="opt-row"><input type="checkbox" id="opt-seq"><span>Mode Urutan Kartu (01 &rarr;
+                        04)</span></label>
+                <label class="opt-row"><input type="checkbox" id="opt-timer" checked><span>Penghitung Waktu (20
+                        Detik)</span></label>
+                <label class="opt-row"><input type="checkbox" id="opt-sound" checked><span>Efek Suara
+                        Interaktif</span></label>
+            </div>
+            <button id="btn-start" class="primary" type="button">Mulai Kamera AR</button>
+            <p class="small">Ketuk objek 3D untuk memutarnya, cubit untuk zoom.</p>
+        </div>
+    </div>
+
+    <div id="loading" class="overlay hidden">
+        <div class="box">
+            <p>Memuat model &amp; kamera...</p>
+        </div>
+    </div>
+
+    <div id="error" class="overlay hidden">
+        <div class="box err">
+            <h2 id="err-title">Terjadi Kesalahan</h2>
+            <p id="err-msg"></p>
+            <button id="btn-retry" class="primary">Muat Ulang</button>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var $ = function (id) { return document.getElementById(id); };
+            var OPT_KEY = 'ar-komponen-komputer-opts';
+            var ids = { seq: 'opt-seq', timer: 'opt-timer', sound: 'opt-sound' };
+            try {
+                var saved = JSON.parse(localStorage.getItem(OPT_KEY));
+                if (saved) for (var k in ids) if (typeof saved[k] === 'boolean') $(ids[k]).checked = saved[k];
+            } catch (e) { }
+            function saveOpts() {
+                var o = {}; for (var k in ids) o[k] = $(ids[k]).checked;
+                try { localStorage.setItem(OPT_KEY, JSON.stringify(o)); } catch (e) { }
+            }
+            for (var k2 in ids) $(ids[k2]).addEventListener('change', saveOpts);
+            function showErr(title, msg) {
+                $('start').classList.add('hidden'); $('loading').classList.add('hidden');
+                $('err-title').textContent = title; $('err-msg').textContent = msg;
+                $('error').classList.remove('hidden');
+            }
+            window.addEventListener('unhandledrejection', function (e) { console.error(e.reason); });
+            $('btn-start').addEventListener('click', function () {
+                if (location.protocol === 'file:') {
+                    return showErr('Jangan Buka dari File Langsung',
+                        'index.html dibuka lewat file:// sehingga modul JavaScript diblokir browser. Jalankan server lokal (python -m http.server 8000 lalu buka http://localhost:8000) atau buka lewat tautan HTTPS GitHub Pages.');
+                }
+                saveOpts();
+                if ($('opt-sound').checked) {
+                    try { var AC = window.AudioContext || window.webkitAudioContext; window.__actx = new AC(); if (window.__actx.resume) window.__actx.resume(); } catch (e) { }
+                }
+                $('start').classList.add('hidden');
+                $('loading').classList.remove('hidden');
+                import('./js/app.js').then(function (m) { return m.init(); }).catch(function (e) {
+                    console.error(e);
+                    showErr('Gagal Memuat Pustaka AR',
+                        'Three.js/MindAR tidak dapat dimuat dari CDN. Periksa koneksi internet, matikan pemblokir konten/VPN, dan pastikan browser terbaru (Chrome 89+, Safari 16.4+). Detail: ' + (e && e.message ? e.message : e));
+                });
+            });
+        })();
+    </script>
+</body>
+
+</html>
