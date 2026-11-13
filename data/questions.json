@@ -1,0 +1,54 @@
+[
+  {
+    "id": 0,
+    "component": "CPU (Processor)",
+    "question": "Apa fungsi utama CPU pada komputer?",
+    "options": [
+      "Menyimpan data secara permanen",
+      "Mengeksekusi instruksi program dan memproses data",
+      "Menampilkan gambar ke monitor",
+      "Menghubungkan semua komponen ke listrik"
+    ],
+    "answer": 1,
+    "explanation": "CPU adalah 'otak' komputer: mengambil, mendekode, dan mengeksekusi instruksi program."
+  },
+  {
+    "id": 1,
+    "component": "RAM (Memory)",
+    "question": "Apa sifat utama memori RAM?",
+    "options": [
+      "Permanen, data tetap ada saat komputer mati",
+      "Khusus memproses grafis 3D",
+      "Sementara dan cepat, menyimpan data yang sedang dipakai CPU",
+      "Mendinginkan prosesor"
+    ],
+    "answer": 2,
+    "explanation": "RAM bersifat volatile: cepat, menyimpan data/program yang sedang berjalan, dan terhapus saat daya mati."
+  },
+  {
+    "id": 2,
+    "component": "GPU (Graphics Card)",
+    "question": "Tugas utama GPU adalah...",
+    "options": [
+      "Mengatur jaringan internet",
+      "Menyimpan sistem operasi",
+      "Mengubah arus listrik PLN",
+      "Memproses grafis dan komputasi paralel, misalnya render 3D"
+    ],
+    "answer": 3,
+    "explanation": "GPU punya ribuan inti kecil untuk pekerjaan paralel seperti grafis, game, dan pelatihan AI."
+  },
+  {
+    "id": 3,
+    "component": "Motherboard",
+    "question": "Fungsi motherboard adalah...",
+    "options": [
+      "Menghubungkan dan memungkinkan komunikasi antar komponen komputer",
+      "Menghitung operasi matematika saja",
+      "Menyimpan foto dan video",
+      "Menampilkan antarmuka pengguna"
+    ],
+    "answer": 0,
+    "explanation": "Motherboard adalah papan sirkuit utama tempat CPU, RAM, GPU, dan penyimpanan saling terhubung."
+  }
+]
